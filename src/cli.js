@@ -1,8 +1,18 @@
 #!/usr/bin/env node
 const t_square = require('./index.js');
 
-const printUsage = function() {
-    console.log('\nUsage:\n' + '  $ t-square-cli <n>\n' + '  $ t-square-cli <n> <size>\n' + '\nFlags:\n -b: Draw using block characters\n');
+const printUsage = function(showIntro) {
+    if (showIntro) {
+        console.log('\n Print the T-Square Fractal to the console!');
+    }
+    console.log('\n' + 
+                ' Usage:\n' + 
+                '   $ t-square-cli <n>\n' + 
+                '   $ t-square-cli <n> <size>\n' + 
+                '\n' + 
+                ' Options:\n' + 
+                '   --blocks, -b             Draw using block characters\n' + 
+                '   --character=<character>  Draw using 1 specific character\n');
 }
 
 const getFlags = function(params) {
@@ -31,11 +41,38 @@ const getValues = function(params) {
 
 const drawBlocks = function(flags) {
     for (let i = 0; i < flags.length; i++) {
-        if (flags[i] && flags[i].toLowerCase() === '-b') {
+        if (flags[i] && (flags[i].toLowerCase() === '--blocks' || flags[i].toLowerCase() === '-b')) {
             return true;
         }
     }
     return false;
+}
+
+const drawCharacter = function(flags) {
+    for (let i = 0; i < flags.length; i++) {
+        if (flags[i] && flags[i].toLowerCase().startsWith('--character=')) {
+            return true;
+        }
+    }
+    return false;
+}
+
+const getCharacter = function(flags) {
+    for (let i = 0; i < flags.length; i++) {
+        if (flags[i] && flags[i].toLowerCase().startsWith('--character=')) {
+            const character = flags[i].substring(12);
+            if (character) {
+                if (character.length === 1) {
+                    return character;
+                } else {
+                    console.log('\n Warning: Please provide just 1 character.  Example: --character=*');
+                }
+            } else {
+                console.log('\n Warning: Please provide 1 character.  Example: --character=*');
+            }
+        }
+    }
+    return undefined;
 }
 
 if (process.argv.length > 2) {
@@ -49,23 +86,20 @@ if (process.argv.length > 2) {
             if (!isNaN(values[1]) && parseInt(values[1]) >= n) {
                 s = parseInt(values[1]);
             } else {
-                console.log('\n<size> should be a number greater than or equal to <n>');
-                printUsage();
+                console.log('\n <size> should be a number greater than or equal to <n>');
+                printUsage(false);
             }
         } else {
             s = n;
         }
         if (n !== undefined && s !== undefined) {
-            if (drawBlocks(flags)) {
-                console.log(t_square.create(n, s, '█'));
-            } else {
-                console.log(t_square.create(n, s));
-            }
+            const character = drawBlocks(flags) ? '█' : getCharacter(flags);
+            console.log(t_square.create(n, { size: s, character: character }));
         }
     } else {
-        console.log('\n<n> should be a number greater than or equal to 0');
-        printUsage();
+        console.log('\n <n> should be a number greater than or equal to 0');
+        printUsage(false);
     }
 } else {
-    printUsage();
+    printUsage(true);
 }

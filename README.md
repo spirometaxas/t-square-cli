@@ -1,5 +1,5 @@
 # t-square-cli
-Print the T-Square Fractal to the console!
+Print the [T-Square Fractal](https://en.wikipedia.org/wiki/T-square_(fractal)) to the console!
 
 ## Usage
 ### Via `npx`:
@@ -23,7 +23,6 @@ then:
 ```
 const t_square = require('t-square-cli');
 console.log(t_square.create(<n>));
-console.log(t_square.create(<n>, <size>));
-console.log(t_square.create(<n>, <size>, <character>));
+console.log(t_square.create(<n>, { size: <number>, character: <character> }));
 ```
-
+The config params are optional.
