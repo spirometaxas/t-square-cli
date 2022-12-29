@@ -3,13 +3,16 @@ const t_square = require('./index.js');
 
 const printUsage = function(showIntro) {
     if (showIntro) {
-        console.log('\n Print the T-Square Fractal to the console!');
+        console.log(t_square.create(2));
+        console.log(' Print the T-Square Fractal to the console!');
     }
     console.log('\n' + 
                 ' Usage:\n' + 
                 '   $ t-square-cli <n>\n' + 
                 '   $ t-square-cli <n> <size>\n' + 
                 '\n' + 
+                '   <n> is the recursive step, a number greater than or equal to 0\n' + 
+                '\n' +
                 ' Options:\n' + 
                 '   --blocks, -b             Draw using block characters\n' + 
                 '   --character=<character>  Draw using 1 specific character\n');
